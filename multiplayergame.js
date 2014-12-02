@@ -129,12 +129,15 @@ function goDown() {
 
 var socket;
 var user;
-init();
+var host = "ws://localhost:9000/multiplayergameserver.php";
+var host_backup = "ws://localhost:9010/multiplayergameserver_backup.php";
+var isOnBackup = false;
+init(host);
 
 
  
-    function init() {
-        var host = "ws://localhost:9000/multiplayergameserver.php"; // SET THIS TO YOUR SERVER
+    function init(host) {
+        //var host = "ws://localhost:9000/multiplayergameserver.php"; // SET THIS TO YOUR SERVER
          
         try
         {
@@ -187,7 +190,15 @@ init();
             //Connection closed
             socket.onclose = function(msg) 
             { 
-                log("Disconnected - status " + this.readyState); 
+                
+                if (!isOnBackup) {
+                	log("Disconnected from Main - status " + this.readyState);
+                	isOnBackup = true;
+                	init(host_backup);	
+                } else {
+                	log("Disconnected from Backup - status " + this.readyState);
+                }
+                
             };
              
             socket.onerror = function()
