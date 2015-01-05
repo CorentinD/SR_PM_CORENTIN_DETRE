@@ -143,7 +143,7 @@ init(host);
         try
         {
             socket = new WebSocket(host);
-            log('WebSocket - status ' + socket.readyState);
+            //log('WebSocket - status ' + socket.readyState);
             
              
             socket.onopen = function(msg) 
@@ -158,7 +158,7 @@ init(host);
             			var color = getColor();	
                 		socket.send("recoUser;"+color)
            			} else {
-           				log("We are now connected to websocket server. readyState = " + this.readyState); 
+           				//log("We are now connected to websocket server. readyState = " + this.readyState); 
 
                     	socket.send("initGame");
            			}
@@ -193,7 +193,7 @@ init(host);
             		break;
 
             		default:
-            		log(" [ + ] Received: " + msg.data); 
+            		log(" [ + ] " + msg.data); 
 
             	}
                 
@@ -215,7 +215,7 @@ init(host);
              
             socket.onerror = function()
             {
-                log("Some error");
+                //log("Some error");
             }
         }
          
@@ -275,7 +275,6 @@ function placeSweets(stringArrayOfSweets) {
 		var sweetsCoordinates = parseInt(arrayOfSweets[i]);
 		var td = tds[sweetsCoordinates];
 		td.innerHTML = '0';
-		td.setAttribute('style', 'color:blue');
 		td.setAttribute('class', 'sweet');
 
 
@@ -296,7 +295,10 @@ function placeUser(stringArrayUser) {
 	usertd.innerHTML = '@';
 	usertd.setAttribute('class', 'user');
 	usertd.setAttribute('userID', 1);
-	usertd.setAttribute('style', ('color:'+arrayUser[2]));
+	usertd.setAttribute('style', ('color:transparent'));
+
+	var imgUrl = "url(img/"+arrayUser[2]+"cat.png)";
+	usertd.style.backgroundImage = imgUrl;
 
 }
 

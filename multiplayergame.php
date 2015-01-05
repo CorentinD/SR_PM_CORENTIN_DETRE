@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Dat multiplayer game</title>
+    <link rel="stylesheet" type="text/css" href="multiplayer.css">
   </head>
 
   <body> 

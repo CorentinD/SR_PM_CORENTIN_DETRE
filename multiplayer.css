@@ -1,0 +1,24 @@
+#log{
+	font-weight: lighter;	
+}
+
+.sweet {
+	color: transparent;
+	background: url(img/cookie.png);
+    background-size: 20px 18px;
+    background-repeat: no-repeat;
+}
+
+.user {
+	font-weight: bold;
+}
+
+.nothing {
+	font-weight: lighter;
+	color: white;
+}
+
+.user {
+    background-size: 38px 20px;
+    background-repeat: no-repeat;
+}
