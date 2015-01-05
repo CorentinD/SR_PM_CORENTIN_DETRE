@@ -9,16 +9,17 @@
     background-repeat: no-repeat;
 }
 
-.user {
-	font-weight: bold;
-}
-
 .nothing {
 	font-weight: lighter;
 	color: white;
 }
 
 .user {
+    background-size: 38px 20px;
+    background-repeat: no-repeat;
+}
+
+.other {
     background-size: 38px 20px;
     background-repeat: no-repeat;
 }

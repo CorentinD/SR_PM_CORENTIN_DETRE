@@ -54,7 +54,8 @@ abstract class interface_multiplayer extends WebSocketServer {
   		$arrayOfColors[] = $color;
 
   		$mysqli_result = mysqli_query($link,"INSERT INTO `available_colors`(`color`) VALUES  ('".$color."')");
-  		echo "Color inserted after user deletion : ".$color."\n";
+  		$mysqli_result = mysqli_query($link,"SELECT coordinates FROM user_infos WHERE id='".$user->id."'")->fetch_assoc();
+		$oldLocation = $mysqli_result["coordinates"];
 
   		deleteUser($user->id);
 
@@ -63,6 +64,8 @@ abstract class interface_multiplayer extends WebSocketServer {
   		if (($key = array_search($user, $arrayOfUsers)) !== false) {
    			unset($arrayOfUsers[$key]);
 		}
+
+		$this->sendToAll("su;".$oldLocation);
 
   	}
 

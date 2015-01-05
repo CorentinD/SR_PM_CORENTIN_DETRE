@@ -192,6 +192,10 @@ init(host);
             		moveUser(msg.data);
             		break;
 
+            		case "su":
+            		supprUser(msg.data);
+            		break;
+
             		default:
             		log(" [ + ] " + msg.data); 
 
@@ -340,8 +344,6 @@ function moveUser (stringArrayMoveUser) {
 	if (!someOneIsOnNextCell) {
 		if (weAreMoving) {
 
-			//log('nextCell.class '+nextCell.getAttribute('class')+' / '+someOneIsOnNextCell);
-
 			var exUserCellStyle = us.getAttribute('style');
 
 			us.innerHTML = '.';
@@ -366,10 +368,12 @@ function moveUser (stringArrayMoveUser) {
 			nextCell.innerHTML = '@';
 			nextCell.setAttribute('style', exUserCellStyle);
 			nextCell.setAttribute('class', 'other');
+
+			nextCell.setAttribute('style', ('color:transparent'));
+			var imgUrl = "url(img/"+arrayMoveUser[4]+"cat.png)";
+			nextCell.style.backgroundImage = imgUrl;
 		}
-	} else {
-		//log('someOneIsOnNextCell '+someOneIsOnNextCell);
-	}
+	} 
 
 
 	// 0 : mu
@@ -377,6 +381,16 @@ function moveUser (stringArrayMoveUser) {
 	// 2 : old localization of the user
 	// 3 : new localization
 	// 4 : color of the moving user
+}
+
+function supprUser(stringArraySupprUser) {
+	var arraySupprUser = stringArraySupprUser.split(";");
+
+	var tds = document.querySelectorAll("#gameTable td");
+	var userToSuppr = tds[parseInt(arraySupprUser[1])];
+
+	userToSuppr.setAttribute('class','nothing');
+	userToSuppr.style.backgroundImage='none';
 }
 
 
