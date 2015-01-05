@@ -48,7 +48,13 @@ abstract class interface_multiplayer extends WebSocketServer {
   	protected function closed ($user) {
 
   		global $arrayOfColors;
-  		$arrayOfColors[] = getColorUser($user->id);
+  		global $link;
+
+		$color = getColorUser($user->id);
+  		$arrayOfColors[] = $color;
+
+  		$mysqli_result = mysqli_query($link,"INSERT INTO `available_colors`(`color`) VALUES  ('".$color."')");
+  		echo "Color inserted after user deletion : ".$color."\n";
 
   		deleteUser($user->id);
 
@@ -78,6 +84,9 @@ abstract class interface_multiplayer extends WebSocketServer {
 			$mysqli_result = mysqli_query($link,"UPDATE user_infos SET coordinates=".$arrayNewUser[0]." WHERE id='".$user->id."';");
 
 			$mysqli_result = mysqli_query($link,"UPDATE user_infos SET color='".$arrayNewUser[1]."' WHERE id='".$user->id."';");
+
+			$this->send($user, 'Hello '.$user->id.', you\'re now connected !');
+			$this->sendToAll("<strong style='color:".$arrayNewUser[1]."'>User ".$arrayNewUser[1]." has entered the ARENA OF DEATH </strong>");
 
 			return $arrayNewUser;
 	}
@@ -167,7 +176,6 @@ function placeSweets($size, $numberOfCoordinates) {
 	for ($i = 0; $i<$size; $i++) {
 
 		$coordinates = $arrayOfRandoms[$i];
-
 		
 		$mysqli_result = mysqli_query($link,"INSERT INTO sweets_infos (id, coordinates) VALUES (".$i.",".$coordinates.")");
 		
@@ -235,8 +243,17 @@ function getLocalizationOfNewUser() {
 function getNextColor() {
 
 	global $arrayOfColors;
+	global $link;
 
-	return array_shift($arrayOfColors);
+	$mysqli_result = mysqli_query($link,"SELECT * FROM available_colors LIMIT 1")->fetch_assoc();
+
+	$color = $mysqli_result["color"];	
+
+	$mysqli_result = mysqli_query($link,"DELETE FROM available_colors WHERE color='".$color."'");
+
+	array_shift($arrayOfColors);
+
+	return $color;
 }
 
 function getColorUser($id) {
@@ -344,7 +361,8 @@ function whoWin() {
 			$userMax = $user;
 		}
 	}
-	return "<p style='color:".explode(";",getScore($user))[2]."'>". explode(";",getScore($user))[2]." is winning with ".$max." sweets eaten ! </p>";
+	$scoreUserMax = explode(";",getScore($userMax));
+	return "<p style='color:".$scoreUserMax[2]."'>". $scoreUserMax[2]." is winning with ".$max." sweets eaten ! </p>";
 }
 
 

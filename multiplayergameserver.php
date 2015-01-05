@@ -13,16 +13,12 @@ class multiplayer extends interface_multiplayer {
 
 		global $link;
 		$mysqli_result = mysqli_query($link,"INSERT INTO user_infos (id, sweets_eaten) VALUES ('".$user->id."', 0)");
-		$this->send($user, 'Hello '.$user->id.', you\'re now connected !');
-
 		// We add each new user to an array in order to ba able to broadcast messages later, 
 		// for instance : new localisation of user after they move.
 		global $arrayOfUsers;
 		$arrayOfUsers[] = $user;
 
-		$this->sendToAll("User ".$user->id." has entered the ARENA OF DEATH");
-
-  	}
+		}
 
 }
 

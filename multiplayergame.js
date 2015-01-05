@@ -132,6 +132,7 @@ var user;
 var host = "ws://localhost:9000/multiplayergameserver.php";
 var host_backup = "ws://localhost:9010/multiplayergameserver_backup.php";
 var isOnBackup = false;
+var wasConnected = false;
 init(host);
 
 
@@ -143,15 +144,26 @@ init(host);
         {
             socket = new WebSocket(host);
             log('WebSocket - status ' + socket.readyState);
+            
              
             socket.onopen = function(msg) 
             { 
                 if(this.readyState == 1)
                 {
-                    log("We are now connected to websocket server. readyState = " + this.readyState); 
 
+
+                	//If the user was already connected, we don't want to re-init the game but simply to reconnect to the server.
+
+                	if (isOnBackup && wasConnected) {
+            			var color = getColor();	
+                		socket.send("recoUser;"+color)
+           			} else {
+           				log("We are now connected to websocket server. readyState = " + this.readyState); 
+
+                    	socket.send("initGame");
+           			}
                     
-                    socket.send("initGame");
+                    wasConnected = true;
                     
                 }
             };
@@ -194,7 +206,7 @@ init(host);
                 if (!isOnBackup) {
                 	log("Disconnected from Main - status " + this.readyState);
                 	isOnBackup = true;
-                	init(host_backup);	
+                	init(host_backup);
                 } else {
                 	log("Disconnected from Backup - status " + this.readyState);
                 }
@@ -245,6 +257,11 @@ init(host);
 ***************************************************************************************************************************************************************************************
 ***************************************************************************************************************************************************************************************
 ***************************************************************************************************************************************************************************************/
+
+function getColor() {
+	var color = document.querySelector("td[class = user]").getAttribute("style").split(":");
+	return color[1];
+}
 
 function placeSweets(stringArrayOfSweets) {
 
@@ -348,7 +365,9 @@ function moveUser (stringArrayMoveUser) {
 			nextCell.setAttribute('style', exUserCellStyle);
 			nextCell.setAttribute('class', 'other');
 		}
-	} else {log('someOneIsOnNextCell '+someOneIsOnNextCell);}
+	} else {
+		//log('someOneIsOnNextCell '+someOneIsOnNextCell);
+	}
 
 
 	// 0 : mu
