@@ -157,6 +157,7 @@ init(host);
                 	if (isOnBackup && wasConnected) {
             			var color = getColor();	
                 		socket.send("recoUser;"+color)
+                		log("Reconnecting");
            			} else {
            				//log("We are now connected to websocket server. readyState = " + this.readyState); 
 
@@ -208,7 +209,7 @@ init(host);
             { 
                 
                 if (!isOnBackup) {
-                	log("Disconnected from Main - status " + this.readyState);
+                	log("Disconnected from Main - Connecting to Backup");
                 	isOnBackup = true;
                 	init(host_backup);
                 } else {
@@ -263,8 +264,8 @@ init(host);
 ***************************************************************************************************************************************************************************************/
 
 function getColor() {
-	var color = document.querySelector("td[class = user]").getAttribute("style").split(":");
-	return color[1];
+	var color = document.querySelector("td[class = user]").getAttribute("color");
+	return color;
 }
 
 function placeSweets(stringArrayOfSweets) {
@@ -298,8 +299,8 @@ function placeUser(stringArrayUser) {
 
 	usertd.innerHTML = '@';
 	usertd.setAttribute('class', 'user');
-	usertd.setAttribute('userID', 1);
 	usertd.setAttribute('style', ('color:transparent'));
+	usertd.setAttribute('color',arrayUser[2]);
 
 	var imgUrl = "url(img/"+arrayUser[2]+"cat.png)";
 	usertd.style.backgroundImage = imgUrl;
@@ -345,28 +346,34 @@ function moveUser (stringArrayMoveUser) {
 		if (weAreMoving) {
 
 			var exUserCellStyle = us.getAttribute('style');
+			var exUserCellColor = us.getAttribute('color');
 
 			us.innerHTML = '.';
 			us.setAttribute('style', nextCell.getAttribute('style'));
+			us.setAttribute('color', nextCell.getAttribute('color'));
 			us.setAttribute('class', 'nothing');
 
 
 			nextCell.innerHTML = '@';
 			nextCell.setAttribute('style', exUserCellStyle);
+			nextCell.setAttribute('color', exUserCellColor);
 			nextCell.setAttribute('class', 'user');
 
 		} else {
 			var otherUser = tds[parseInt(arrayMoveUser[2])]; 
 		
 			var exUserCellStyle = 'color:'+arrayMoveUser[4];
+			var exUserCellColor = arrayMoveUser[4];
 
 			otherUser.innerHTML = '.';
 			otherUser.setAttribute('style', nextCell.getAttribute('style'));
 			otherUser.setAttribute('class', 'nothing');
+			otherUser.setAttribute('color', '');
 
 
 			nextCell.innerHTML = '@';
 			nextCell.setAttribute('style', exUserCellStyle);
+			nextCell.setAttribute('color', exUserCellColor);
 			nextCell.setAttribute('class', 'other');
 
 			nextCell.setAttribute('style', ('color:transparent'));

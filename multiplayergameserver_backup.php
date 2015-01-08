@@ -80,7 +80,7 @@ try {
 	$link = connectToDatabase();
 	
 	//Getting the sweets coordinates from DB
-	$arrayOfSweets = getSweetsFromDB();;
+	$arrayOfSweets = getSweetsFromDB();
 	//Creation of an Array of User used for the broadcast
 	$arrayOfUsers;
 	
@@ -119,7 +119,6 @@ function getSweetsFromDB() {
         	$result[$row["id"]] = $row["coordinates"];
     	}
 	}
-
 	return $result;
 }
 
